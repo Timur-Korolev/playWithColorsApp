@@ -27,9 +27,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        addDoneButton()
         configureTextFields()
-        setupTextFields()
-        self.hideKeyboard()
+        hideKeyboard()
     }
 
     @IBAction func SliderAction() {
@@ -37,7 +37,26 @@ class ViewController: UIViewController {
         transferValueFromSliders()
     }
     
-    func setupTextFields() {
+    @objc func doneButtonAction() {
+        transferValueFromTextFields()
+        setMainViewColor()
+        self.view.endEditing(true)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        transferValueFromTextFields()
+        setMainViewColor()
+    }
+    
+    func hideKeyboard() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
+            target: self.view,
+            action: #selector(UIView.endEditing))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    func addDoneButton() {
         let toolbar = UIToolbar(frame: CGRect(origin: .zero, size: .init(width: view.frame.size.width, height: 30)))
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let doneBtn = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonAction))
@@ -48,11 +67,6 @@ class ViewController: UIViewController {
         redTextField.inputAccessoryView = toolbar
         greenTextField.inputAccessoryView = toolbar
         blueTextField.inputAccessoryView = toolbar
-    }
-    @objc func doneButtonAction() {
-        transferValueFromTextFields()
-        setMainViewColor()
-        self.view.endEditing(true)
     }
 }
 
@@ -105,19 +119,10 @@ extension ViewController: UITextFieldDelegate {
             blueLabel.text = String(number)
         }
     }
-}
-
-extension UIViewController {
-    func hideKeyboard() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
-            target: self,
-            action: #selector(UIViewController.dismissKeyboard))
-        
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
     
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
+
+    
+    
+    
+
 }
