@@ -28,6 +28,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         configureTextFields()
+        setupTextFields()
         self.hideKeyboard()
     }
 
@@ -36,11 +37,22 @@ class ViewController: UIViewController {
         transferValueFromSliders()
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    func setupTextFields() {
+        let toolbar = UIToolbar(frame: CGRect(origin: .zero, size: .init(width: view.frame.size.width, height: 30)))
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneBtn = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonAction))
+        
+        toolbar.setItems([flexSpace, doneBtn], animated: false)
+        toolbar.sizeToFit()
+        
+        redTextField.inputAccessoryView = toolbar
+        greenTextField.inputAccessoryView = toolbar
+        blueTextField.inputAccessoryView = toolbar
+    }
+    @objc func doneButtonAction() {
         transferValueFromTextFields()
         setMainViewColor()
-        textField.resignFirstResponder()
-        return true
+        self.view.endEditing(true)
     }
 }
 
