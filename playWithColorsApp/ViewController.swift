@@ -33,17 +33,16 @@ class ViewController: UIViewController {
 
     @IBAction func SliderAction() {
         setMainViewColor()
-        getValueFromSliders()
+        transferValueFromSliders()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        getValueFromTextFelds()
+        transferValueFromTextFields()
         setMainViewColor()
         textField.resignFirstResponder()
         return true
     }
-    
-    }
+}
 
 extension ViewController: UITextFieldDelegate {
     private func setupView() {
@@ -53,7 +52,7 @@ extension ViewController: UITextFieldDelegate {
         greenSlider.minimumTrackTintColor = .green
         blueSlider.minimumTrackTintColor = .blue
         
-        getValueFromSliders()
+        transferValueFromSliders()
         setMainViewColor()
     }
     
@@ -67,7 +66,7 @@ extension ViewController: UITextFieldDelegate {
         mainView.backgroundColor = UIColor(displayP3Red: CGFloat(redSlider.value), green: CGFloat(greenSlider.value), blue: CGFloat(blueSlider.value), alpha: 1)
     }
     
-    private func getValueFromSliders() {
+    private func transferValueFromSliders() {
         redLabel.text = String(roundf(redSlider.value * 100) / 100)
         greenLabel.text = String(roundf(greenSlider.value * 100) / 100)
         blueLabel.text = String(roundf(blueSlider.value * 100) / 100)
@@ -77,7 +76,7 @@ extension ViewController: UITextFieldDelegate {
         blueTextField.text = String(roundf(blueSlider.value * 100) / 100)
     }
     
-    private func getValueFromTextFelds() {
+    private func transferValueFromTextFields() {
         guard let redText = redTextField.text, !redText.isEmpty  else { return }
         if let number = Float(redText) {
             redSlider.value = number
