@@ -95,10 +95,8 @@ extension ViewController: UITextFieldDelegate {
     }
 }
 
-extension UIViewController
-{
-    func hideKeyboard()
-    {
+extension UIViewController {
+    func hideKeyboard() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(
             target: self,
             action: #selector(UIViewController.dismissKeyboard))
@@ -107,8 +105,7 @@ extension UIViewController
         view.addGestureRecognizer(tap)
     }
     
-    @objc func dismissKeyboard()
-    {
+    @objc func dismissKeyboard() {
         view.endEditing(true)
     }
 }
