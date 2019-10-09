@@ -8,7 +8,11 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+protocol BackgroundColor {
+    var mainVCBackgroundColor: UIColor { get }
+}
+
+class SettingsViewController: UIViewController, BackgroundColor {
 
     @IBOutlet var mainView: UIView!
     
@@ -24,6 +28,16 @@ class ViewController: UIViewController {
     @IBOutlet var greenTextField: UITextField!
     @IBOutlet var blueTextField: UITextField!
     
+    var delegate: SettingsViewControllerDelegate!
+    
+    var mainVCBackgroundColor: UIColor {
+        mainView.backgroundColor ?? .white
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        delegate.setBackgroundColor(mainVCBackgroundColor)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -32,45 +46,48 @@ class ViewController: UIViewController {
         hideKeyboard()
     }
 
-    @IBAction func SliderAction() {
+    @IBAction func sliderAction() {
         setMainViewColor()
         transferValueFromSliders()
     }
-    
-    @objc func doneButtonAction() {
-        transferValueFromTextFields()
-        setMainViewColor()
-        self.view.endEditing(true)
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        transferValueFromTextFields()
-        setMainViewColor()
-    }
-    
-    func hideKeyboard() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
-            target: self.view,
-            action: #selector(UIView.endEditing))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-    
-    func addDoneButton() {
-        let toolbar = UIToolbar(frame: CGRect(origin: .zero, size: .init(width: view.frame.size.width, height: 30)))
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneBtn = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonAction))
-        
-        toolbar.setItems([flexSpace, doneBtn], animated: false)
-        toolbar.sizeToFit()
-        
-        redTextField.inputAccessoryView = toolbar
-        greenTextField.inputAccessoryView = toolbar
-        blueTextField.inputAccessoryView = toolbar
-    }
 }
 
-extension ViewController: UITextFieldDelegate {
+extension SettingsViewController: UITextFieldDelegate {
+    
+    @objc func doneButtonAction() {
+           transferValueFromTextFields()
+           setMainViewColor()
+           view.endEditing(true)
+       }
+       
+       func textFieldDidEndEditing(_ textField: UITextField) {
+           transferValueFromTextFields()
+           setMainViewColor()
+       }
+       
+       func hideKeyboard() {
+           let tap: UITapGestureRecognizer = UITapGestureRecognizer(
+               target: view,
+               action: #selector(UIView.endEditing))
+           tap.cancelsTouchesInView = false
+           view.addGestureRecognizer(tap)
+       }
+       
+       func addDoneButton() {
+           let toolbar = UIToolbar(frame: CGRect(origin: .zero, size: .init(width: view.frame.size.width, height: 30)))
+           let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+           let doneBtn = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonAction))
+           
+           toolbar.setItems([flexSpace, doneBtn], animated: false)
+           toolbar.sizeToFit()
+           
+           redTextField.inputAccessoryView = toolbar
+           greenTextField.inputAccessoryView = toolbar
+           blueTextField.inputAccessoryView = toolbar
+       }
+}
+
+extension SettingsViewController {
     private func setupView() {
         mainView.layer.cornerRadius = 15
         
@@ -119,10 +136,4 @@ extension ViewController: UITextFieldDelegate {
             blueLabel.text = String(number)
         }
     }
-    
-
-    
-    
-    
-
 }
